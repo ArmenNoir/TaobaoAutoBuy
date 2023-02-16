@@ -14,7 +14,7 @@ if __name__ == '__main__':
   driver.get('https://login.taobao.com/')
   sleep(4)
   #driver.find_element(By.XPATH,'//*[@id="pl_login_form"]/div/div[1]/div/a[2]').click()
-  sleep(60)#You can modify this waiting time for login, better to use SMS
+  sleep(30)#You can modify this waiting time for login, better to use SMS
   dictCookies = driver.get_cookies() 
   jsonCookies = json.dumps(dictCookies) 
   with open('tb_cookies.txt', 'w') as f:

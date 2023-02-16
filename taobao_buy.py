@@ -68,21 +68,25 @@ class taobao_buy:
         print(browser.current_url) 
 
     def select(self, browser, click_list):
-        button = browser.find_element(By.XPATH, '//*[@id="J_SelectAll1"]/div/label')
-        browser.execute_script("arguments[0].click();", button)
-        #todo 单独购买按钮覆盖太多层找不到了
-        '''
+        #全选
+        #button = browser.find_element(By.XPATH, '//*[@id="J_SelectAll1"]/div/label')
+        #browser.execute_script("arguments[0].click();", button)
+        
+        #单独购买
         for click_box in click_list:
             #//*[@id="J_Order_s_3249253975_1"]/div[1]/div/div
-            button = browser.find_element(By.XPATH, click_box)
-            browser.execute_script("arguments[0].click();", button)
-            sleep(2)
-            print('click : ',click_box)
-        '''
+            try:
+                button = browser.find_element(By.XPATH, click_box)
+                #browser.execute_script("arguments[0].click();", button)
+                webdriver.ActionChains(browser).move_to_element(button).click(button).perform()
+                sleep(2)
+                print('click : ',click_box)
+            except:
+                logger.warn('There is no such shop in cart! ',click_box)
         sleep(2)
-        #todo 匿名购买按钮有问题，覆盖很多层了
+        #todo 匿名购买按钮
         #any_buy = browser.find_element(By.XPATH,'//*[@id="anonymousPC_1"]')
-        #browser.execute_script("arguments[0].click();", any_buy) 
+        #webdriver.ActionChains(browser).move_to_element(any_buy).click(any_buy).perform() 
         #sleep(2)
     
     def buy(self,browser):
@@ -90,7 +94,6 @@ class taobao_buy:
         browser.execute_script("arguments[0].click();", checkout)
         while browser.current_url == 'https://cart.taobao.com/':
             sleep(0.1)
-            #sleep(10)
             # get multiple window
             windows = browser.window_handles
             # switch to new DM window
@@ -117,16 +120,6 @@ class taobao_buy:
             self.login(browser)
             self.cart(browser)
             self.select(browser, click_list)
-
-            #//*[@id="J_SelectAll1"]    全选
-            #//*[@id="J_SelectAll1"]/div 全选的小方框
-            #店铺1全部
-            #/html/body/div[1]/div[3]/div/div/div[2]/div[2]/div[1]/div/div[1]/div/div
-            #//*[@id="J_Order_s_店铺id_1"]/div[1]/div/div 店铺1全部
-            #//*[@id="J_Order_s_店铺id_1"]/div[1]/div/div
-            #店铺1商品1
-            #/html/body/div[1]/div[3]/div/div/div[2]/div[2]/div[1]/div/div[2]/div/div[1]/div[2]/div/div/div/ul/li[1]/div/div/div
-
             
             auto_time = datetime.strptime(auto_time, "%Y-%m-%d %H~%M~%S.%f")
             print(auto_time)
@@ -143,7 +136,7 @@ class taobao_buy:
 
 def _get_config():
     """get json"""
-    config_path = os.getcwd() + os.sep + 'TaobaoAutoBuy' + os.sep +'config.json'
+    config_path = os.getcwd() + os.sep +'config.json'
     print(config_path)
     try:
         with open(config_path) as f:
@@ -165,7 +158,7 @@ def _analyze_xpath(config):
 if __name__ == '__main__':
     try:
         config = _get_config()
-        #click_list = _analyze_xpath(config)
+        click_list = _analyze_xpath(config)
         tb = taobao_buy(config, click_list)
         tb.start(browser, click_list)
         logger.info('Finished\n')
