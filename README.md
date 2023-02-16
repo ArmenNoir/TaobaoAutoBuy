@@ -18,9 +18,11 @@ YYYY-MM-DD HH~mm
 2023-02-15 15~43
 ```
 修改shopID为你想要买的东西的店铺id
-'''
+
+```
 ["123","1234"]
-'''
+```
+
 如果购物车中没有该店铺则不会进行勾选
 https://mihoyo.tmall.com/shop/view_shop.htm?spm=1938t.6639537/tb.0.0.76ba7484pKaOYc&user_number_id=3249253975
 店铺id为点击店铺首页后链接中的user_number_id，上面案例shopid为3249253975，是米哈游旗舰店
